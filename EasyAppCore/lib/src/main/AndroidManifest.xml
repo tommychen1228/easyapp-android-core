@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.myideaway.easyapp.core"
-          android:versionCode="10"
-          android:versionName="2.0.0">
+          package="com.myideaway.easyapp.core">
 
     <application></application>
 
