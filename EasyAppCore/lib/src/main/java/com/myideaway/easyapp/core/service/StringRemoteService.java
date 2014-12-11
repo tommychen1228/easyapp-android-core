@@ -1,0 +1,102 @@
+package com.myideaway.easyapp.core.service;
+
+import com.myideaway.easyapp.core.Config;
+import com.myideaway.easyapp.core.exception.RemoteServiceException;
+import com.squareup.okhttp.*;
+import roboguice.util.Ln;
+
+import java.util.concurrent.TimeUnit;
+
+public abstract class StringRemoteService extends RemoteService {
+
+
+    @Override
+    public Object onExecute() throws RemoteServiceException {
+
+        try {
+
+            String result = null;
+
+            if (formFiles != null) {
+
+                Ln.d("Send post multipart url " + postUrl + ", param " + params);
+
+                MultipartBuilder multipartBuilder = new MultipartBuilder();
+                multipartBuilder.type(MultipartBuilder.FORM);
+
+                for (FormFile formFile : formFiles) {
+                    multipartBuilder.addFormDataPart(formFile.getName(), null,  RequestBody.create(null, formFile.getFile()));
+                }
+
+                for (String key : params.keySet()) {
+                    Object value = params.get(key);
+                    multipartBuilder.addFormDataPart(key, String.valueOf(value));
+                }
+
+                RequestBody requestBody = multipartBuilder.build();
+
+                Request request = new Request.Builder()
+                        .url(postUrl)
+                        .post(requestBody)
+                        .build();
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.setConnectTimeout(Config.REMOTE_SERVICE_TIME_OUT, TimeUnit.MILLISECONDS);
+
+                Response response = okHttpClient.newCall(request).execute();
+                result = response.body().toString();
+
+            } else {
+                if (requestMethod == REQUEST_METHOD_GET) {
+                    Ln.d("Send get url " + postUrl + ", param " + params);
+
+                    StringBuffer appendParams = new StringBuffer();
+                    for (String key : params.keySet()) {
+                        Object value = params.get(key);
+
+                        appendParams.append(key).append("&").append(value);
+                    }
+
+                    Request request = new Request.Builder()
+                            .url(postUrl + "?" + appendParams.toString())
+                            .build();
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    okHttpClient.setConnectTimeout(Config.REMOTE_SERVICE_TIME_OUT, TimeUnit.MILLISECONDS);
+
+                    Response response = okHttpClient.newCall(request).execute();
+                    result = response.body().toString();
+                } else {
+
+                    Ln.d("Send post url " + postUrl + ", param " + params);
+
+                    FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
+                    for (String key : params.keySet()) {
+                        Object value = params.get(key);
+                        formEncodingBuilder.add(key, String.valueOf(value));
+                    }
+
+                    RequestBody requestBody = formEncodingBuilder.build();
+
+                    Request request = new Request.Builder()
+                            .url(postUrl)
+                            .post(requestBody)
+                            .build();
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    okHttpClient.setConnectTimeout(Config.REMOTE_SERVICE_TIME_OUT, TimeUnit.MILLISECONDS);
+
+                    Response response = okHttpClient.newCall(request).execute();
+                    result = response.body().toString();
+                }
+
+            }
+
+            Ln.d("Result " + result);
+
+            return result;
+        } catch (Exception e) {
+            throw new RemoteServiceException(e);
+        }
+    }
+}
