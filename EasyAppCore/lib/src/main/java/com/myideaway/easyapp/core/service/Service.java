@@ -37,6 +37,16 @@ public abstract class Service {
         return executeResult;
     }
 
+    public final Object syncExecute(OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) throws Exception {
+        setOnSuccessHandler(onSuccessHandler);
+        setOnFaultHandler(onFaultHandler);
+
+        executeResult = syncExecute();
+
+        return executeResult;
+    }
+
+
     public final void asyncExecute() {
         isCanceled = false;
 
@@ -67,6 +77,13 @@ public abstract class Service {
             }
         }.execute(0);
 
+    }
+
+    public final void asyncExecute(OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) {
+        setOnSuccessHandler(onSuccessHandler);
+        setOnFaultHandler(onFaultHandler);
+
+        asyncExecute();
     }
 
     protected void willExecute() {
