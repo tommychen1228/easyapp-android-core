@@ -1,7 +1,7 @@
 package com.myideaway.easyapp.core.intent;
 
 import android.content.Intent;
-import roboguice.util.Ln;
+import com.myideaway.easyapp.core.L;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class IntentObjectPool {
     public static void remove(Intent intent) {
         String pooluid = intent.getStringExtra("pooluid");
 
-        Ln.d("remove object intent " + pooluid);
+        L.d("remove object intent " + pooluid);
 
         if (pool.containsKey(pooluid)) {
             pool.remove(pooluid);
@@ -36,7 +36,7 @@ public class IntentObjectPool {
             pooluid = UUID.randomUUID().toString();
             intent.putExtra("pooluid", pooluid);
 
-            Ln.d("generate object intent " + pooluid);
+            L.d("generate object intent " + pooluid);
         }
 
         HashMap<String, Object> item = null;
@@ -53,7 +53,7 @@ public class IntentObjectPool {
     public static Object getObjectExtra(Intent intent, String name, Object defaultValue) {
         String pooluid = intent.getStringExtra("pooluid");
 
-        Ln.d("get object intent " + pooluid);
+        L.d("get object intent " + pooluid);
 
         HashMap<String, Object> item = null;
         if (pool.containsKey(pooluid)) {

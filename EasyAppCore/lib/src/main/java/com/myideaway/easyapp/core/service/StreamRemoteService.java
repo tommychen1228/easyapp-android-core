@@ -1,6 +1,7 @@
 package com.myideaway.easyapp.core.service;
 
 import com.myideaway.easyapp.core.Config;
+import com.myideaway.easyapp.core.L;
 import com.myideaway.easyapp.core.exception.RemoteServiceException;
 import com.squareup.okhttp.*;
 import roboguice.util.Ln;
@@ -18,7 +19,7 @@ public abstract class StreamRemoteService extends RemoteService {
 
             if (formFiles != null) {
 
-                Ln.d("Send post multipart url " + postUrl + ", param " + params);
+                L.d("Send post multipart url " + postUrl + ", param " + params);
 
                 MultipartBuilder multipartBuilder = new MultipartBuilder();
                 multipartBuilder.type(MultipartBuilder.FORM);
@@ -47,7 +48,7 @@ public abstract class StreamRemoteService extends RemoteService {
 
             } else {
                 if (requestMethod == REQUEST_METHOD_GET) {
-                    Ln.d("Send get url " + postUrl + ", param " + params);
+                    L.d("Send get url " + postUrl + ", param " + params);
 
                     StringBuffer appendParams = new StringBuffer();
                     for (String key : params.keySet()) {
@@ -67,7 +68,7 @@ public abstract class StreamRemoteService extends RemoteService {
                     result = response.body().byteStream();
                 } else {
 
-                    Ln.d("Send post url " + postUrl + ", param " + params);
+                    L.d("Send post url " + postUrl + ", param " + params);
 
                     FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
                     for (String key : params.keySet()) {
@@ -90,7 +91,7 @@ public abstract class StreamRemoteService extends RemoteService {
                 }
             }
 
-            Ln.d("Result " + result);
+            L.d("Result " + result);
 
             return result;
         } catch (Exception e) {
