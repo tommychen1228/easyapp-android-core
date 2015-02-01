@@ -6,7 +6,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
@@ -17,6 +17,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
+        applicationId "com.myideaway.easyapp.core.sample"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
@@ -31,7 +32,10 @@ android {
 }
 
 dependencies {
+    provided 'org.roboguice:roboblender:3.+'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'commons-lang:commons-lang:2.6'
-    compile 'com.squareup.okhttp:okhttp:2.1.0'
+    compile project(':lib')
+    compile 'org.roboguice:roboguice:3.+'
+
 }

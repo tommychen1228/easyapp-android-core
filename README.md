@@ -1,2 +1,0 @@
-easyapp-android
-===============

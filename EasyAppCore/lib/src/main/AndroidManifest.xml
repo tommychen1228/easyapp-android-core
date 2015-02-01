@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.myideaway.easyapp.core">
+          package="com.myideaway.easyapp.core.lib">
 
-    <application></application>
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher"
+            >
+
+    </application>
 
 </manifest>
