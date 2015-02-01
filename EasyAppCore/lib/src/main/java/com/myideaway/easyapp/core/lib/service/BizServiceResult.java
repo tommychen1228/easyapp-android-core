@@ -4,13 +4,13 @@ package com.myideaway.easyapp.core.lib.service;
  * Created by cdm on 15/1/31.
  */
 public class BizServiceResult {
-    private Object date;
+    private Object data;
 
-    public Object getDate() {
-        return date;
+    public Object getData() {
+        return data;
     }
 
-    public void setDate(Object date) {
-        this.date = date;
+    public void setData(Object data) {
+        this.data = data;
     }
 }
