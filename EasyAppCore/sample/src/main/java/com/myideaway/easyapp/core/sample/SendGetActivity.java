@@ -12,6 +12,7 @@ import com.myideaway.easyapp.core.lib.service.BizService;
 import com.myideaway.easyapp.core.lib.service.RemoteService;
 import com.myideaway.easyapp.core.lib.service.BizServiceResult;
 import com.myideaway.easyapp.core.lib.service.Service;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -54,9 +55,9 @@ public class SendGetActivity extends RoboActivity {
 
                 WeatherBSGet.ServiceResult serviceResult = (WeatherBSGet.ServiceResult) result;
 
-                L.d(serviceResult.getDate().toString());
+                L.d(serviceResult.getPm25().toString());
 
-                resultTextView.setText(serviceResult.getDate().toString());
+                resultTextView.setText(serviceResult.getPm25().toString());
             }
         }, new Service.OnFaultHandler() {
             @Override
@@ -86,13 +87,30 @@ public class SendGetActivity extends RoboActivity {
             //JSONObject jsonObject = (JSONObject) remoteJSON(RemoteService.REQUEST_METHOD_GET, "http://api.map.baidu.com/telematics/v3/weather", params);
 
             ServiceResult serviceResult = new ServiceResult();
-            serviceResult.setDate(jsonObject);
+            // 可以选择通过设置默认得data属性来设置结果
+            //serviceResult.setDate(jsonObject);
+            // 也可以通过自己给ServiceResult添加属性来封装结果
+
+
+            JSONArray resultsJSONArray = jsonObject.optJSONArray("results");
+            JSONObject cityJSONObject = resultsJSONArray.optJSONObject(0);
+            String pm25 = cityJSONObject.optString("pm25");
+
+            serviceResult.setPm25(pm25);
 
             return serviceResult;
         }
 
         class ServiceResult extends BizServiceResult {
+            private String pm25;
 
+            public String getPm25() {
+                return pm25;
+            }
+
+            public void setPm25(String pm25) {
+                this.pm25 = pm25;
+            }
         }
 
     }

@@ -55,9 +55,9 @@ public class UploadFileActivity extends RoboActivity {
 
                 FileBSUpload.ServiceResult serviceResult = (FileBSUpload.ServiceResult) result;
 
-                L.d(serviceResult.getDate().toString());
+                L.d(serviceResult.getData().toString());
 
-                resultTextView.setText(serviceResult.getDate().toString());
+                resultTextView.setText(serviceResult.getData().toString());
             }
         }, new Service.OnFaultHandler() {
             @Override
@@ -88,7 +88,7 @@ public class UploadFileActivity extends RoboActivity {
             JSONObject jsonObject = (JSONObject) remoteJSON(RemoteService.REQUEST_METHOD_POST, "http://xxxxxxxx", null, files);
 
             ServiceResult serviceResult = new ServiceResult();
-            serviceResult.setDate(jsonObject);
+            serviceResult.setData(jsonObject);
 
             return serviceResult;
         }
