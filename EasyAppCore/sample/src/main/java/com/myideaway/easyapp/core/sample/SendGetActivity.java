@@ -1,23 +1,23 @@
 package com.myideaway.easyapp.core.sample;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.myideaway.easyapp.core.lib.L;
 import com.myideaway.easyapp.core.lib.service.BizService;
-import com.myideaway.easyapp.core.lib.service.RemoteService;
 import com.myideaway.easyapp.core.lib.service.BizServiceResult;
+import com.myideaway.easyapp.core.lib.service.RemoteService;
 import com.myideaway.easyapp.core.lib.service.Service;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
-
-import java.util.HashMap;
 
 /**
  * Created by cdm on 15/1/30.
@@ -48,10 +48,16 @@ public class SendGetActivity extends RoboActivity {
         progressDialog.show();
 
         WeatherBSGet weatherBSGet = new WeatherBSGet(SendGetActivity.this);
-        weatherBSGet.asyncExecute(new Service.OnSuccessHandler() {
+        weatherBSGet.asyncExecute(new Service.OnCompleteHandler() {
+
+            @Override
+            public void onComplete(Service target) {
+                progressDialog.dismiss();
+            }
+
+        }, new Service.OnSuccessHandler() {
             @Override
             public void onSuccess(Service target, Object result) {
-                progressDialog.dismiss();
 
                 WeatherBSGet.ServiceResult serviceResult = (WeatherBSGet.ServiceResult) result;
 
@@ -62,7 +68,7 @@ public class SendGetActivity extends RoboActivity {
         }, new Service.OnFaultHandler() {
             @Override
             public void onFault(Service target, Exception ex) {
-                progressDialog.dismiss();
+
             }
         });
 

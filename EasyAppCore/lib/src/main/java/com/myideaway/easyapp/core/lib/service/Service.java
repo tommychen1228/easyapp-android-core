@@ -11,6 +11,8 @@ public abstract class Service {
     private Object executeResult;
     private OnSuccessHandler onSuccessHandler;
     private OnFaultHandler onFaultHandler;
+    private OnCompleteHandler onCompleteHandler;
+
     private Exception executeException;
 
     public final Object syncExecute() throws Exception {
@@ -19,11 +21,19 @@ public abstract class Service {
         try {
             executeResult = doExecute();
 
+            if(onCompleteHandler != null){
+                onCompleteHandler.onComplete(this);
+            }
+
             if (onSuccessHandler != null) {
                 onSuccessHandler.onSuccess(this, executeResult);
             }
 
         } catch (Exception ex) {
+            if(onCompleteHandler != null){
+                onCompleteHandler.onComplete(this);
+            }
+
             executeException = ex;
 
             if (onFaultHandler != null) {
@@ -37,7 +47,8 @@ public abstract class Service {
         return executeResult;
     }
 
-    public final Object syncExecute(OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) throws Exception {
+    public final Object syncExecute(OnCompleteHandler onCompleteHandler, OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) throws Exception {
+        setOnCompleteHandler(onCompleteHandler);
         setOnSuccessHandler(onSuccessHandler);
         setOnFaultHandler(onFaultHandler);
 
@@ -65,6 +76,10 @@ public abstract class Service {
             }
 
             protected void onPostExecute(Integer result) {
+                if(onCompleteHandler != null){
+                    onCompleteHandler.onComplete(Service.this);
+                }
+
                 if (result == TASK_RESULT_SUCCESS) {
                     if (onSuccessHandler != null) {
                         onSuccessHandler.onSuccess(Service.this, executeResult);
@@ -79,7 +94,8 @@ public abstract class Service {
 
     }
 
-    public final void asyncExecute(OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) {
+    public final void asyncExecute(OnCompleteHandler onCompleteHandler, OnSuccessHandler onSuccessHandler, OnFaultHandler onFaultHandler) {
+        setOnCompleteHandler(onCompleteHandler);
         setOnSuccessHandler(onSuccessHandler);
         setOnFaultHandler(onFaultHandler);
 
@@ -129,6 +145,14 @@ public abstract class Service {
         this.onFaultHandler = onFaultHandler;
     }
 
+    public OnCompleteHandler getOnCompleteHandler() {
+        return onCompleteHandler;
+    }
+
+    public void setOnCompleteHandler(OnCompleteHandler onCompleteHandler) {
+        this.onCompleteHandler = onCompleteHandler;
+    }
+
     public boolean isCanceled() {
         return isCanceled;
     }
@@ -139,5 +163,9 @@ public abstract class Service {
 
     public interface OnFaultHandler {
         public void onFault(Service target, Exception ex);
+    }
+
+    public interface OnCompleteHandler {
+        public void onComplete(Service target);
     }
 }
