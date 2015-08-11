@@ -17,7 +17,7 @@ public abstract class BizService extends Service {
     @Override
     protected abstract BizServiceResult onExecute() throws Exception;
 
-    protected String remoteString(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> formFiles) throws Exception {
+    protected String remoteString(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> fs) throws Exception {
         StringRemoteService stringRemoteService = new StringRemoteService() {
             @Override
             protected Map<String, Object> getParams() {
@@ -31,7 +31,7 @@ public abstract class BizService extends Service {
 
             @Override
             protected List<FormFile> getFormFiles() {
-                return formFiles;
+                return fs;
             }
         };
 
@@ -44,7 +44,7 @@ public abstract class BizService extends Service {
         return remoteString(method, url, params, null);
     }
 
-    protected Object remoteJSON(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> formFiles) throws Exception {
+    protected Object remoteJSON(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> fs) throws Exception {
         JSONStringRemoteService jsonStringRemoteService = new JSONStringRemoteService() {
             @Override
             protected Map<String, Object> getParams() {
@@ -58,7 +58,7 @@ public abstract class BizService extends Service {
 
             @Override
             protected List<FormFile> getFormFiles() {
-                return formFiles;
+                return fs;
             }
         };
 
@@ -75,7 +75,7 @@ public abstract class BizService extends Service {
         return remoteJSON(method, url, null, null);
     }
 
-    protected InputStream remoteStream(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> formFiles) throws Exception {
+    protected InputStream remoteStream(final int method, final String url, final Map<String, Object> p, final List<RemoteService.FormFile> fs) throws Exception {
         StreamRemoteService streamRemoteService = new StreamRemoteService() {
             @Override
             protected Map<String, Object> getParams() {
@@ -89,7 +89,7 @@ public abstract class BizService extends Service {
 
             @Override
             protected List<FormFile> getFormFiles() {
-                return formFiles;
+                return fs;
             }
         };
 

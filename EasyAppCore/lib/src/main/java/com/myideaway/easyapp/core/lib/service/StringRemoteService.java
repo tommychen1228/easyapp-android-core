@@ -26,7 +26,7 @@ public abstract class StringRemoteService extends RemoteService {
                 multipartBuilder.type(MultipartBuilder.FORM);
 
                 for (FormFile formFile : formFiles) {
-                    multipartBuilder.addFormDataPart(formFile.getName(), null, RequestBody.create(null, formFile.getFile()));
+                    multipartBuilder.addFormDataPart(formFile.getName(), formFile.getName(), RequestBody.create(MultipartBuilder.FORM, formFile.getFile()));
                 }
 
                 for (String key : params.keySet()) {
