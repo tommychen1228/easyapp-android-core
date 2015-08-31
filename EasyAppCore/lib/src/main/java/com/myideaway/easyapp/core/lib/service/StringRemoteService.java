@@ -3,7 +3,14 @@ package com.myideaway.easyapp.core.lib.service;
 import com.myideaway.easyapp.core.lib.Config;
 import com.myideaway.easyapp.core.lib.L;
 import com.myideaway.easyapp.core.lib.exception.RemoteServiceException;
-import com.squareup.okhttp.*;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -26,7 +33,10 @@ public abstract class StringRemoteService extends RemoteService {
                 multipartBuilder.type(MultipartBuilder.FORM);
 
                 for (FormFile formFile : formFiles) {
-                    multipartBuilder.addFormDataPart(formFile.getName(), formFile.getName(), RequestBody.create(MultipartBuilder.FORM, formFile.getFile()));
+                    String fileName = FilenameUtils.getName(formFile.getFile().getName());
+                    multipartBuilder.addFormDataPart(formFile.getName(), fileName, RequestBody.create(MultipartBuilder.FORM, formFile.getFile()));
+
+                    L.d("File " + fileName);
                 }
 
                 for (String key : params.keySet()) {
