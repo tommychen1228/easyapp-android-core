@@ -12,16 +12,16 @@ android {
         minSdkVersion 14
         targetSdkVersion 14
         versionCode 20
-        versionName "2.0.2"
+        versionName "2.0.3"
     }
 
-    libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".aar", "-easy-app-core-2.0.1.aar"))
-        }
-    }
+//    libraryVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            output.outputFile = new File(
+//                    output.outputFile.parent,
+//                    output.outputFile.name.replace(".aar", "-easy-app-core-2.0.1.aar"))
+//        }
+//    }
 
     buildTypes {
         release {
