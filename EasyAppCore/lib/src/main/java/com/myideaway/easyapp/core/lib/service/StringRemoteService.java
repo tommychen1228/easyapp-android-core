@@ -13,6 +13,7 @@ import com.squareup.okhttp.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class StringRemoteService extends RemoteService {
@@ -41,7 +42,16 @@ public abstract class StringRemoteService extends RemoteService {
 
                 for (String key : params.keySet()) {
                     Object value = params.get(key);
-                    multipartBuilder.addFormDataPart(key, String.valueOf(value));
+
+                    if (value instanceof List) {
+                        List list = (List)value;
+
+                        for (Object listItem: list){
+                            multipartBuilder.addFormDataPart(key, String.valueOf(listItem));
+                        }
+                    } else {
+                        multipartBuilder.addFormDataPart(key, String.valueOf(value));
+                    }
                 }
 
                 RequestBody requestBody = multipartBuilder.build();
@@ -67,7 +77,15 @@ public abstract class StringRemoteService extends RemoteService {
                         for (String key : params.keySet()) {
                             Object value = params.get(key);
 
-                            appendParams.append(key).append("=").append(value).append("&");
+                            if (value instanceof List) {
+                                List list = (List)value;
+
+                                for (Object listItem: list){
+                                    appendParams.append(key).append("=").append(listItem).append("&");
+                                }
+                            } else {
+                                appendParams.append(key).append("=").append(value).append("&");
+                            }
                         }
                     }
 
@@ -95,6 +113,17 @@ public abstract class StringRemoteService extends RemoteService {
                     if (params != null) {
                         for (String key : params.keySet()) {
                             Object value = params.get(key);
+
+                            if (value instanceof List) {
+                                List list = (List)value;
+
+                                for (Object listItem: list){
+                                    formEncodingBuilder.add(key, String.valueOf(listItem));
+                                }
+                            } else {
+                                formEncodingBuilder.add(key, String.valueOf(value));
+                            }
+
                             formEncodingBuilder.add(key, String.valueOf(value));
                         }
                     }
